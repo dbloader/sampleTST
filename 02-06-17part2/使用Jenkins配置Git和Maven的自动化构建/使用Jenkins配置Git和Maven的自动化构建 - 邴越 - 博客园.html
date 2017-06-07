@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://www.cnblogs.com/binyue/p/4815459.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/bundle-iMetro_HD.css">
+<link type="text/css" rel="stylesheet" href="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/157324.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/bundle-iMetro_HD-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/binyue/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/binyue/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/binyue/wlwmanifest.xml">
+<script async="" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/analytics.js.téléchargement"></script><script src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/jquery.js.téléchargement" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'binyue', cb_enable_mathjax=true;var isLogined=false;</script>
+<script src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/blog-common.js.téléchargement" type="text/javascript"></script>
+<script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({
+  tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] },
+  TeX: { equationNumbers: { autoNumber: ['AMS'], useLabelIds: true }, extensions: ['extpfeil.js'] },
+  'HTML-CSS': { linebreaks: { automatic: true } },
+  SVG: { linebreaks: { automatic: true } }});</script><script type="text/javascript" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/MathJax.js.téléchargement"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+<a name="top"></a>
+<div id="page_begin_html">
+</div><script>load_page_begin_html();</script>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/binyue/"><img id="blogLogo" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/binyue/">纸上得来终觉浅</a></h1>
+<h2>记录和分享学习笔记</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/binyue/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/%E9%82%B4%E8%B6%8A">联系</a></li>
+<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/binyue/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/binyue/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 258&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 135</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/binyue/p/4815459.html">使用Jenkins配置Git和Maven的自动化构建</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><p><span style="color: #000000; font-size: 16px;">Jenkins是一个开源的持续集成工具，</span><span style="font-size: 16px;">应用Jenkins搭建持续集成环境，可以进行自动构建、自动编译和部署，非常方便。</span></p>
+<p><span style="font-size: 16px;">在服务器比较少的情况下，Jenkins的优势并不明显，但是随着项目发展，服务器数量的增加，Jenkins的优势就会凸显出来，可以很好的提高效率，减少很多人工操作。</span></p>
+<p><span style="font-size: 16px;">现在公司的开发都是使用Git管理代码，Maven管理多模块和项目依赖，</span></p>
+<p><span style="font-size: 16px;">所以今天尝试学习<span style="color: #ff0000;"><strong>如何使用Jenkins搭建Github与Maven下的自动构建和部署</strong></span>。</span></p>
+<h2><span style="color: #000000;">1.部署Jenkins</span></h2>
+<p><span style="font-size: 15px;">官网下载<span style="color: #800080;"><strong><a href="http://jenkins-ci.org/" target="_blank"><span style="color: #800080;">http://jenkins-ci.org/</span></a></strong></span>。目前的最新版本是1.629。</span></p>
+<p><span style="font-size: 15px;">Jenkins的安装十分简单，下载后就是一个jenkins.war的war包，可以直接部署在Tomcat或者其他容器中。</span></p>
+<p><span style="font-size: 15px;">如果不能部署，可以检查Tomcat的配置文件，可以查看server.xml里unpackWARs和autoDeploy是否设置为True。</span></p>
+<p><span style="font-size: 15px;">另外官网还有相关的.deb等的安装，比较繁琐，</span><span style="font-size: 15px;">具体哪种方式部署可以自己选择。</span></p>
+<p>&nbsp;</p>
+<h2><span style="color: #000000;">2.安装相关插件</span></h2>
+<p><span style="font-size: 15px;">把war文件拷贝到Tomcat的webapps目录，</span></p>
+<p><span style="font-size: 15px;">启动后进入http://SERVER_PATH:8080/jenkins/，可以看到Jenkins已经在运行：</span></p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150918165312961-806428532.png" alt=""></p>
+<p><span style="font-size: 15px;">配置Git仓库需要用到Git插件，Jenkins默认没有Git插件，需要手动安装。</span></p>
+<p>点击<span style="color: #008000;"><strong>Manage Jenkins</strong></span>，进入<span style="color: #008000;"><strong>Manage Plugins</strong></span>，</p>
+<p>在<span style="color: #008000;"><strong>可用(Avaliable)插件</strong></span>列表下找到<span style="color: #008000;"><strong>Source Code Management</strong></span>一栏，</p>
+<p>选择<strong><span style="color: #008000;">GIT plugin</span></strong>插件，安装之后重启。</p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922100606272-20119619.png" alt=""></p>
+<p>其他的插件如Maven等，Jenkins默认安装，不需要手动下载。</p>
+<p>&nbsp;</p>
+<h2>3.配置Maven和JDK路径等</h2>
+<p>选择<span style="color: #008000;"><strong>Configure System</strong></span>，可以配置Maven安装路径等。<br>如果没有Maven和Git环境，需要另外设置。</p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922100832303-1707046473.png" alt=""></p>
+<p><span style="color: #008000;"><strong>记得配置JDK路径</strong></span>，第一次我就忘记配置，结果构建时系统自动安装Jdk，特别慢。</p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922104141209-404715489.png" alt=""><br><br></p>
+<p><span style="font-size: 15px;">下面是Jenkins Location选项，jenkins默认会存放在用户主目录下的<span style="color: #ff0000;"><strong>.jenkins文件夹</strong></span>中，如果需要变动可以在这里更改。</span></p>
+<p><span style="font-size: 15px;">后面的shell中也会用到Jenkins Location，默认的访问路径：</span></p>
+<p><strong><span style="color: #800080;"><a href="http://www.cnblogs.com/Jenkins%20Location" target="_blank"><span style="font-size: 15px; color: #800080;">http://SERVER_PATH:8080/jenkins/job/</span></a></span></strong></p>
+<p><strong><span style="color: #800080;"><span style="font-size: 15px; color: #800080;"><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150918165515539-636843212.png" alt=""></span></span></strong></p>
+<p>&nbsp;</p>
+<h2><span style="color: #000000;">4.创建任务，配置项目信息</span></h2>
+<p><span style="font-size: 15px;">为了更好的学习Jenkins，我新建了一个非常简单的Spring MVC项目，这个项目</span><span style="font-size: 15px;">使用Maven管理，提交到了github上，地址：</span></p>
+<p><span style="color: #800080; font-size: 15px;"><strong><span style="color: #800080;"><a href="https://github.com/bingyue/easy-springmvc-maven" target="_blank">https://github.com/bingyue/easy-springmvc-maven</a></span></strong></span></p>
+<p>&nbsp;</p>
+<p><span>pom.xml的部分内容：</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_998212" class="syntaxhighlighter  html"><div class="toolbar"><span><a href="http://www.cnblogs.com/binyue/p/4815459.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="html plain">...</code></div><div class="line number2 index1 alt1"><code class="html plain">&lt;</code><code class="html keyword">groupId</code><code class="html plain">&gt;springmvc-maven&lt;/</code><code class="html keyword">groupId</code><code class="html plain">&gt;</code></div><div class="line number3 index2 alt2"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">artifactId</code><code class="html plain">&gt;easy-springmvc-maven&lt;/</code><code class="html keyword">artifactId</code><code class="html plain">&gt;</code></div><div class="line number4 index3 alt1"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">version</code><code class="html plain">&gt;0.0.1-SNAPSHOT&lt;/</code><code class="html keyword">version</code><code class="html plain">&gt;</code></div><div class="line number5 index4 alt2"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">packaging</code><code class="html plain">&gt;war&lt;/</code><code class="html keyword">packaging</code><code class="html plain">&gt;</code></div><div class="line number6 index5 alt1"><code class="html plain">...</code></div><div class="line number7 index6 alt2"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">build</code><code class="html plain">&gt;</code></div><div class="line number8 index7 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;</code><code class="html comments">&lt;!-- 生成的war文件名 避免添加版本号 --&gt;</code></div><div class="line number9 index8 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">finalName</code><code class="html plain">&gt;easy-springmvc-maven&lt;/</code><code class="html keyword">finalName</code><code class="html plain">&gt;</code></div><div class="line number10 index9 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">plugins</code><code class="html plain">&gt;</code></div><div class="line number11 index10 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">plugin</code><code class="html plain">&gt;</code></div><div class="line number12 index11 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">artifactId</code><code class="html plain">&gt;maven-compiler-plugin&lt;/</code><code class="html keyword">artifactId</code><code class="html plain">&gt;</code></div><div class="line number13 index12 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">version</code><code class="html plain">&gt;3.1&lt;/</code><code class="html keyword">version</code><code class="html plain">&gt;</code></div><div class="line number14 index13 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">configuration</code><code class="html plain">&gt;</code></div><div class="line number15 index14 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">source</code><code class="html plain">&gt;1.6&lt;/</code><code class="html keyword">source</code><code class="html plain">&gt;</code></div><div class="line number16 index15 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">target</code><code class="html plain">&gt;1.6&lt;/</code><code class="html keyword">target</code><code class="html plain">&gt;</code></div><div class="line number17 index16 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">configuration</code><code class="html plain">&gt;</code></div><div class="line number18 index17 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">plugin</code><code class="html plain">&gt;</code></div><div class="line number19 index18 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">plugin</code><code class="html plain">&gt; </code></div><div class="line number20 index19 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">artifactId</code><code class="html plain">&gt;maven-war-plugin&lt;/</code><code class="html keyword">artifactId</code><code class="html plain">&gt; </code></div><div class="line number21 index20 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">configuration</code><code class="html plain">&gt; </code></div><div class="line number22 index21 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;</code><code class="html keyword">version</code><code class="html plain">&gt;3.0 &lt;/</code><code class="html keyword">version</code><code class="html plain">&gt; </code></div><div class="line number23 index22 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">configuration</code><code class="html plain">&gt; </code></div><div class="line number24 index23 alt1"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">plugin</code><code class="html plain">&gt;</code></div><div class="line number25 index24 alt2"><code class="html spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">plugins</code><code class="html plain">&gt;</code></div><div class="line number26 index25 alt1"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">&lt;/</code><code class="html keyword">build</code><code class="html plain">&gt;</code></div><div class="line number27 index26 alt2"><code class="html spaces">&nbsp;&nbsp;</code><code class="html plain">...</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 15px;">首先按照提示创建一个任务，选择<span style="color: #ff0000;"><strong>Maven Project</strong></span>。</span></p>
+<p>&nbsp;<img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150918165343914-989151106.png" alt="" width="916" height="253"></p>
+<p>进入Config页面，点击<span style="color: #ff0000;"><strong>Source Code Management</strong></span>的git选项，</p>
+<p>填入上面的git地址，配置用户名密码等参数。</p>
+<p>&nbsp;<img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922105030678-375758818.png" alt=""></p>
+<p><span style="font-size: 15px;">下面的<span style="color: #008000;"><strong>Build Triggers</strong></span>是一个持续集成的触发器插件，</span><br><span style="font-size: 15px;">可以根据已经完成构建的结果，触发新Job或者传递参数。</span><br><span style="font-size: 15px;">默认的选项是Build whenever a SNAPSHOT dependency is built，</span></p>
+<p><span style="font-size: 15px;">意思是依赖于快照的构建意思是依赖于快照的构建，当代码有更新时就构建项目。</span></p>
+<p><span style="font-size: 15px;">下面的<span style="color: #008000;"><strong>Build periodically和Poll SCM</strong></span>可以设置定时自动构建，这里我暂时不设置。</span></p>
+<p>		<img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922101616115-1997555604.png" alt=""></p>
+<p><span style="font-size: 15px;"><span style="color: #008000;"><strong>Pre Steps选项</strong></span>用来配置构建前的工作，这里不作更改。</span></p>
+<p><span style="font-size: 15px;">因为是Maven项目，Build选项有<span style="color: #008000;"><strong>Root POM和Goals and options</strong></span>的设置，</span><br><span style="font-size: 15px;">使用默认的打包应该就可以。</span></p>
+<p>&nbsp;</p>
+<h2>5.配置构建成功后的动作，添加shell</h2>
+<p><span style="font-size: 15px;"><span style="color: #ff0000;"><strong>Post Steps选项</strong></span>设置构建完成后的动作，</span><br><span style="font-size: 15px;">这里我设置为<strong>将war包拷贝到Tomcat目录，删除项目原来的内容文件夹，并重启Tomcat</strong>。</span></p>
+<p><span style="font-size: 15px;">选择<strong>Run only if build succeeds or is unstable</strong> ，点击添加Execute Shell：</span></p>
+<div class="cnblogs_Highlighter sh-gutter">
+<div><div id="highlighter_647985" class="syntaxhighlighter  bash"><div class="toolbar"><span><a href="http://www.cnblogs.com/binyue/p/4815459.html#" class="toolbar_item command_help help">?</a></span></div><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div><div class="line number30 index29 alt1">30</div><div class="line number31 index30 alt2">31</div><div class="line number32 index31 alt1">32</div><div class="line number33 index32 alt2">33</div><div class="line number34 index33 alt1">34</div><div class="line number35 index34 alt2">35</div><div class="line number36 index35 alt1">36</div><div class="line number37 index36 alt2">37</div><div class="line number38 index37 alt1">38</div><div class="line number39 index38 alt2">39</div><div class="line number40 index39 alt1">40</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="bash comments">#!/bin/bash&nbsp; </code></div><div class="line number2 index1 alt1"><code class="bash comments">#copy file and restart tomcat</code></div><div class="line number3 index2 alt2">&nbsp;</div><div class="line number4 index3 alt1"><code class="bash plain">tomcat_path=</code><code class="bash plain">/usr/local/tomcat2</code></div><div class="line number5 index4 alt2"><code class="bash plain">project=easy-springmvc-maven</code></div><div class="line number6 index5 alt1"><code class="bash plain">war_name=easy-springmvc-maven.war</code></div><div class="line number7 index6 alt2"><code class="bash plain">war_path=http:</code><code class="bash plain">//192</code><code class="bash plain">.168.106.128:8080</code><code class="bash plain">/jenkins/job/jeekins-test/ws/target</code></div><div class="line number8 index7 alt1"><code class="bash plain">server_port=8082</code></div><div class="line number9 index8 alt2"><code class="bash plain">file_path=</code><code class="bash plain">/home/bingyue/</code><code class="bash plain">.jenkins</code><code class="bash plain">/jobs/jeekins-test/workspace/target</code></div><div class="line number10 index9 alt1">&nbsp;</div><div class="line number11 index10 alt2"><code class="bash plain">now=$(</code><code class="bash functions">date</code> <code class="bash plain">+</code><code class="bash string">"%Y%m%d%H%M%S"</code><code class="bash plain">)</code></div><div class="line number12 index11 alt1"><code class="bash functions">echo</code> <code class="bash string">"the shell execute time is ${now}"</code></div><div class="line number13 index12 alt2">&nbsp;</div><div class="line number14 index13 alt1"><code class="bash functions">echo</code> <code class="bash plain">`</code><code class="bash functions">lsof</code> <code class="bash plain">-n -P -t -i :${server_port}`</code></div><div class="line number15 index14 alt2"><code class="bash plain">tomcat_pid=`</code><code class="bash functions">lsof</code> <code class="bash plain">-n -P -t -i :${server_port}`</code></div><div class="line number16 index15 alt1"><code class="bash functions">echo</code> <code class="bash string">"the tomcat_pid is ${tomcat_pid}"</code></div><div class="line number17 index16 alt2">&nbsp;</div><div class="line number18 index17 alt1"><code class="bash keyword">if</code> <code class="bash plain">[ </code><code class="bash string">"${tomcat_pid}"</code> <code class="bash plain">!= </code><code class="bash string">""</code> <code class="bash plain">]; </code><code class="bash keyword">then</code>&nbsp;</div><div class="line number19 index18 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">kill</code> <code class="bash plain">-9 $tomcat_pid</code></div><div class="line number20 index19 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">echo</code> <code class="bash string">"kill the server"</code></div><div class="line number21 index20 alt2"><code class="bash keyword">fi</code>&nbsp;</div><div class="line number22 index21 alt1">&nbsp;</div><div class="line number23 index22 alt2"><code class="bash functions">echo</code> <code class="bash string">"rm ${tomcat_path}/webapps/${war_name}"</code></div><div class="line number24 index23 alt1"><code class="bash functions">rm</code> <code class="bash plain">${tomcat_path}</code><code class="bash plain">/webapps/</code><code class="bash plain">${war_name}</code></div><div class="line number25 index24 alt2">&nbsp;</div><div class="line number26 index25 alt1"><code class="bash functions">echo</code> <code class="bash string">"rm -rf ${tomcat_path}/webapps/${project}"</code></div><div class="line number27 index26 alt2"><code class="bash functions">rm</code> <code class="bash plain">-rf ${tomcat_path}</code><code class="bash plain">/webapps/</code><code class="bash plain">${project}</code></div><div class="line number28 index27 alt1">&nbsp;</div><div class="line number29 index28 alt2"><code class="bash functions">cd</code> <code class="bash plain">$file_path</code></div><div class="line number30 index29 alt1"><code class="bash keyword">if</code> <code class="bash plain">[ -f ${war_name} ]; </code><code class="bash keyword">then</code>&nbsp;</div><div class="line number31 index30 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">cp</code> <code class="bash plain">${war_name} ${tomcat_path}</code><code class="bash plain">/webapps</code></div><div class="line number32 index31 alt1"><code class="bash keyword">else</code></div><div class="line number33 index32 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">echo</code> <code class="bash string">"${war_name} unexists"</code></div><div class="line number34 index33 alt1"><code class="bash keyword">fi</code></div><div class="line number35 index34 alt2">&nbsp;</div><div class="line number36 index35 alt1"><code class="bash functions">export</code> <code class="bash plain">JAVA_HOME=</code><code class="bash plain">/data/jdk7</code></div><div class="line number37 index36 alt2"><code class="bash functions">export</code> <code class="bash plain">CATALINA_HOME2=</code><code class="bash plain">/usr/local/apache-tomcat-2</code></div><div class="line number38 index37 alt1"><code class="bash functions">export</code> <code class="bash plain">CATALINA_BASE2=</code><code class="bash plain">/usr/local/apache-tomcat-2</code></div><div class="line number39 index38 alt2"><code class="bash plain">$tomcat_path</code><code class="bash plain">/bin/startup</code><code class="bash plain">.sh</code></div><div class="line number40 index39 alt1"><code class="bash functions">echo</code> <code class="bash string">"server restarted"</code></div></div></td></tr></tbody></table></div></div>
+</div>
+<p><strong><span style="font-size: 15px;">说明几点：</span></strong></p>
+<p><span style="font-size: 15px;">这次学习是使用了单台虚拟机里的两个Tomcat，所以端口号有改变，</span></p>
+<p><span style="font-size: 15px;">我为了方便测试，直接访问了Jenkins的隐藏目录/.jenkins/文件夹，</span></p>
+<p><span style="font-size: 15px;">实际应用中，<span style="text-decoration: underline;"><strong>Jenkins通常都是应用在分布式系统，同时部署多台服务器，一般都是访问Jenkins所在的机器上下载war包来部署</strong>，</span></span></p>
+<p><span style="font-size: 15px;">我们测试的时候也可以直接修改Jenkins主目录。</span></p>
+<p><span style="font-size: 15px;">最下面的<strong>BuildSetting</strong> 可以设置邮件收件人列表等，在每次构建结束后可以将相关信息发送到邮箱。</span></p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150918165724601-488301711.png" alt=""></p>
+<h2><span style="color: #000000;">6.构建项目</span></h2>
+<p><span style="font-size: 15px;">完成相应的设置后，就可以进行项目的构建。</span><br><span style="font-size: 15px;">在任务列表页点击<span style="color: #008000;"><strong><span style="text-decoration: underline;">Play</span></strong></span>的按钮，或者进入任务然后选择<span style="text-decoration: underline;"><span style="color: #008000;"><strong>Build Now</strong></span></span>。</span></p>
+<p><span style="font-size: 15px;">首页左下角的栏目显示正在构建的项目状态：</span></p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150918165745695-378260882.png" alt=""></p>
+<p><span style="font-size: 15px;">点击可以查看控制台输出和日志：</span></p>
+<p><span style="font-size: 15px;">&nbsp;<img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150922102400428-2029925703.png" alt="" width="934" height="176"></span></p>
+<p><span style="font-size: 15px;">构建成功，项目状态为蓝色，失败是红色。</span></p>
+<p><span style="font-size: 15px;">打包成功后，可以进入workspace查看文件：</span><br><span style="color: #0000ff;"><strong><a href="http://server_path:8080/jenkins/job/jeekins-test/ws/target/easy-springmvc-maven.war" target="_blank"><span style="font-size: 15px; color: #0000ff;">http://SERVER_PATH:8080/jenkins/job/jeekins-test/ws/target/easy-springmvc-maven.war</span></a></strong></span></p>
+<p><span style="font-size: 15px;">现在打开刚才的Tomcat路径，如果控制台没有错误输出，构建的项目应该可以正常访问：</span></p>
+<p><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/524341-20150921190357537-1866433222.png" alt=""></p>
+<p><span style="font-size: 15px;">构建成功！</span></p>
+<p>&nbsp;</p>
+<h2><span style="color: #000000;">7.遇到的问题</span></h2>
+<ul>
+<li><strong>部署到Tomcat时Jenkins启动报错，war包无法解压：</strong></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<p>Invalid or unreadable WAR file : error in opening zip file<br>检查发现是文件下载不完全，重新下载上传后解决。jenkins.war文件有60多MB，使用前记得检查文件完整性。</p>
+<ul>
+<li><strong>首次进入提示Your container doesn’t use UTF-8 to decode URLs. If you use non-ASCII characters as a job name etc, this will cause problems.</strong></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<p>点击Jenkins提示已经给出了解决方案:<br>Some versions of Tomcat (such as 5.0.28) uses iso-8859-1 to decode URLs, which is in a clear violation of the relevant RFCs. To fix this problem, add the following URIEncoding attribute to the connector definition in $TOMCAT_HOME/conf/server.xml.<br>&lt;Connector port="8080" URIEncoding="UTF-8"/&gt;</p>
+<ul>
+<li><strong>Sending e-mails to: name@gmail.com</strong></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+<p>ERROR: Could not connect to SMTP host: localhost, port: 25<br>javax.mail.MessagingException: Could not connect to SMTP host: localhost, port: 25;</p>
+<p><span style="font-size: 15px;">&nbsp;本地的SMTP25端口没有打开。</span></p>
+<p>&nbsp;</p></div><div id="MySignature" style="display: block;"><p style="border-top: #e0e0e0 1px dashed; border-right: #e0e0e0 1px dashed; border-bottom: #e0e0e0 1px dashed; border-left: #e0e0e0 1px dashed; padding-top: 1px; padding-right: 10px; padding-bottom: 10px; padding-left: 110px; background: url(http://images.cnblogs.com/cnblogs_com/binyue/967887/o_88x31.png) #e5f1f4 no-repeat 1% 50%; font-family: 微软雅黑; font-size: 14px;" id="PSignature">  
+<br>作者：邴越  
+<br>好读书求甚解，关注逻辑思维和方法论，请关注微信公众号：越读纪
+<br>本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.5/cn/">知识共享署名-非商业性使用-2.5 中国大陆许可协议</a>进行许可，欢迎转载。
+</p></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/binyue/category/620580.html" target="_blank">大型网站系统架构</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(4815459,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;d03e7b4f-05b4-e211-83e8-90b11c0b17d6&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/binyue/" target="_blank"><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/20170406111412.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/binyue/">邴越</a><br>
+            <a href="http://home.cnblogs.com/u/binyue/followees">关注 - 37</a><br>
+            <a href="http://home.cnblogs.com/u/binyue/followers">粉丝 - 228</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;d03e7b4f-05b4-e211-83e8-90b11c0b17d6&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(4815459,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">1</span>
+    </div>
+    <div class="buryit" onclick="votePost(4815459,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/binyue/p/4800934.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/binyue/p/4800934.html" title="发布于2015-09-20 22:01">Maven使用笔记（六）使用Maven进行多模块拆分</a><br><a href="http://www.cnblogs.com/binyue/p/4823050.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/binyue/p/4823050.html" title="发布于2015-09-24 09:05">Shell脚本入门与应用</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2015-09-22 10:49</span> <a href="http://www.cnblogs.com/binyue/">邴越</a> 阅读(<span id="post_view_count">7876</span>) 评论(<span id="post_comment_count">4</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=4815459" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/binyue/p/4815459.html#" onclick="AddToWz(4815459);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=157324,cb_entryId=4815459,cb_blogApp=currentBlogApp,cb_blogUserGuid='d03e7b4f-05b4-e211-83e8-90b11c0b17d6',cb_entryCreatedDate='2015/9/22 10:49:00';loadViewCount(cb_entryId);</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/binyue/p/4815459.html#3272261" class="layer">#1楼</a><a name="3272261" id="comment_anchor_3272261"></a>  <span class="comment_date">2015-09-23 08:57</span> <a id="a_comment_author_3272261" href="http://www.cnblogs.com/xing901022/" target="_blank">xingoo</a> <a href="http://msg.cnblogs.com/send/xingoo" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3272261" class="blog_comment_body">先收藏了，有时间正好搞下！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3272261,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3272261,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3272261_avatar" style="display:none;">http://pic.cnblogs.com/face/449064/20150318093530.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/binyue/p/4815459.html#3562528" class="layer">#2楼</a><a name="3562528" id="comment_anchor_3562528"></a>  <span class="comment_date">2016-11-22 21:43</span> <a id="a_comment_author_3562528" href="http://www.cnblogs.com/woshimrf/" target="_blank">Ryan.Miao</a> <a href="http://msg.cnblogs.com/send/Ryan.Miao" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3562528" class="blog_comment_body">配置git账号密码的时候可以详细说说吗，配了半天总是eturned status code 128:<br>stdout: <br>stderr: Permission denied (publickey).</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3562528,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3562528,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/binyue/p/4815459.html#3562836" class="layer">#3楼</a><a name="3562836" id="comment_anchor_3562836"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2016-11-23 10:48</span> <a id="a_comment_author_3562836" href="http://www.cnblogs.com/binyue/" target="_blank">邴越</a> <a href="http://msg.cnblogs.com/send/%E9%82%B4%E8%B6%8A" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3562836" class="blog_comment_body"><a href="http://www.cnblogs.com/binyue/p/4815459.html#3562528" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3562528);">@</a>
+Ryan.Miao<br>这篇文章时间比较久了，或者你可以试试不配置使用ssh吗</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3562836,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3562836,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3562836_avatar" style="display:none;">http://pic.cnblogs.com/face/524341/20170406111412.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="http://www.cnblogs.com/binyue/p/4815459.html#3562975" class="layer">#4楼</a><a name="3562975" id="comment_anchor_3562975"></a><span id="comment-maxId" style="display:none;">3562975</span><span id="comment-maxDate" style="display:none;">2016/11/23 13:20:31</span>  <span class="comment_date">2016-11-23 13:20</span> <a id="a_comment_author_3562975" href="http://www.cnblogs.com/woshimrf/" target="_blank">Ryan.Miao</a> <a href="http://msg.cnblogs.com/send/Ryan.Miao" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3562975" class="blog_comment_body"><a href="http://www.cnblogs.com/binyue/p/4815459.html#3562836" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3562836);">@</a>
+邴越<br>恩，找到原因了。是Jenkins在windows上不认识HOME，需要配置一下来找到ssh</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3562975,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3562975,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/binyue/p/4815459.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/binyue/p/4815459.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://cn.udacity.com/mlnd/?utm_source=cnblogs&amp;utm_medium=referral&amp;utm_campaign=MLND03" target="_blank">【推荐】Google机器学习认证项目首推价末班车</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="http://www.gcpowertools.com.cn/products/spreadjs/?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank"><img width="300" height="250" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/24442-20170531232646446-782226241.gif" alt="spreadjs"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/570998/" target="_blank">脉脉用户月活千万，能带动中国职场社交崛起吗？</a><br> ·  <a href="http://news.cnblogs.com/n/571004/" target="_blank">A股公司发公告：起诉乐视！欠了我6000多万元</a><br> ·  <a href="http://news.cnblogs.com/n/571005/" target="_blank">苏宁易购新推出一款空调 唤名“神奇女侠”</a><br> ·  <a href="http://news.cnblogs.com/n/571002/" target="_blank">中国制造新型石墨烯膜材料，手机能做成手镯模样</a><br> ·  <a href="http://news.cnblogs.com/n/571001/" target="_blank">百度度秘事业部成立美国硅谷团队 前谷歌员工任负责人</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="https://www.mtyun.com/activity-anniversary?site=cnblogs&amp;campaign=20170601sales" target="_blank"><img width="468" height="60" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/24442-20170601093816602-1429765193.png" alt="美团云"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/570194/" target="_blank">小printf的故事：真正的程序员？</a><br> ·  <a href="http://kb.cnblogs.com/page/569992/" target="_blank">程序员的工作、学习与绩效</a><br> ·  <a href="http://kb.cnblogs.com/page/569056/" target="_blank">软件开发为什么很难</a><br> ·  <a href="http://kb.cnblogs.com/page/565901/" target="_blank">唱吧DevOps的落地，微服务CI/CD的范本技术解读</a><br> ·  <a href="http://kb.cnblogs.com/page/566523/" target="_blank">程序员，如何从平庸走向理想？</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="https://github.com/bingyue" target="_blank">Github</a><br>
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="http://www.bingyue.me/" target="_blank">个人网站</a><br>
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="https://www.zhihu.com/people/bingyue" target="_blank">知乎</a>|
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="http://www.jianshu.com/users/ed585550612d/latest_articles" target="_blank">简书</a><br>
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="http://www.weibo.com/318092228/" target="_blank">微博</a>|
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="https://bingyue.tuchong.com/" target="_blank">图虫</a><br>
+<a style="color: #5c9a3d; font-size: 18px; font-weight: bold;" href="https://yq.aliyun.com/users/1352098403095467?spm=5176.8091938.0.0.O2z7vw" target="_blank">阿里云栖社区</a><br>
+<h3 class="catListTitle">推荐</h3>
+欢迎关注我的公众号，好读书求甚解，围绕工程师成长和职业发展，关注逻辑思维和方法论，不拘一格输出价值，
+<br>越读™书友会同步上线
+<img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/qrcode_for_gh_fa2271c8aecb_430.jpg" height="100%" width="100%" alt="关注公众账号">
+<h3 class="catListTitle">关于</h3>
+阿里巴巴资深开发工程师，<br>
+云栖社区专家，关注中间件研发，分布式系统及高可用架构，坚持读书和写作，喜欢摄影与原创音乐，期待交流
+<br>
+<h3 class="catListTitle">招聘</h3>
+内推阿里巴巴各事业部岗位，包括淘宝，支付宝，菜鸟网络等的技术，产品和运营，
+简历请发送至<a href="mailto:bingyue.by@alibaba-inc.com">bingyue.by@alibaba-inc.com</a> 
+<br>
+访客：<a href="http://www.amazingcounters.com/"><img border="0" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/counter.php" alt="AmazingCounters.com"></a><br><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/binyue/">邴越</a><br>园龄：<a href="http://home.cnblogs.com/u/binyue/" title="入园时间：2013-05-03">4年1个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/binyue/followers/">228</a><br>关注：<a href="http://home.cnblogs.com/u/binyue/followees/">37</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;d03e7b4f-05b4-e211-83e8-90b11c0b17d6&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/05/01&#39;);return false;">&lt;</a></td><td align="center">2017年6月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/07/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td class="CalWeekendDay" align="center">3</td></tr><tr><td class="CalWeekendDay" align="center">4</td><td align="center">5</td><td class="CalTodayDay" align="center">6</td><td align="center">7</td><td align="center">8</td><td align="center">9</td><td class="CalWeekendDay" align="center">10</td></tr><tr><td class="CalWeekendDay" align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td align="center">16</td><td class="CalWeekendDay" align="center">17</td></tr><tr><td class="CalWeekendDay" align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td align="center">23</td><td class="CalWeekendDay" align="center">24</td></tr><tr><td class="CalWeekendDay" align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td align="center">29</td><td align="center">30</td><td class="CalOtherMonthDay" align="center">1</td></tr><tr><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+
+</div>
+</div>
+
+</div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/binyue/tag/Java/">Java</a>(12)</li><li><a href="http://www.cnblogs.com/binyue/tag/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">读书笔记</a>(9)</li><li><a href="http://www.cnblogs.com/binyue/tag/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>(9)</li><li><a href="http://www.cnblogs.com/binyue/tag/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>(4)</li><li><a href="http://www.cnblogs.com/binyue/tag/%E7%AE%97%E6%B3%95/">算法</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/ACM/">ACM</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/Git/">Git</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/JavaScript/">JavaScript</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/Java%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6/">Java集合框架</a>(1)</li><li><a href="http://www.cnblogs.com/binyue/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/binyue/category/896909.html">Dcoker容器化实践(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/binyue/category/769978.html">Dubbo与分布式服务框架(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/binyue/category/919684.html">ELK日志收集(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/binyue/category/945041.html">Flume应用</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/binyue/category/722099.html">Git最佳实践(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/binyue/category/951976.html">Go语言编程(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/binyue/category/623072.html">Hibernate应用(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/binyue/category/498155.html">Java应用开发(23)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/binyue/category/563941.html">JVM虚拟机深入(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/binyue/category/634228.html">LeetCode题解(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/binyue/category/556088.html">Linux与Shell脚本(21)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/binyue/category/639497.html">Maven笔记(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/binyue/category/877946.html">Memcached应用</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/binyue/category/841013.html">MongoDB实践(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/binyue/category/498153.html">Python笔记(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/binyue/category/715489.html">Redis应用(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/binyue/category/547239.html">Solr索引应用(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="http://www.cnblogs.com/binyue/category/574776.html">Spring应用开发(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="http://www.cnblogs.com/binyue/category/807967.html">SQL应用(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="http://www.cnblogs.com/binyue/category/552409.html">TCP/IP协议(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="http://www.cnblogs.com/binyue/category/1014510.html">阿里开源系列</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="http://www.cnblogs.com/binyue/category/687378.html">并发编程实战(15)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="http://www.cnblogs.com/binyue/category/663733.html">大数据与数据分析(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="http://www.cnblogs.com/binyue/category/620580.html">大型网站系统架构(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="http://www.cnblogs.com/binyue/category/919661.html">读书笔记(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="http://www.cnblogs.com/binyue/category/712340.html">分布式数据一致性(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="http://www.cnblogs.com/binyue/category/560203.html">高性能数据库(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="http://www.cnblogs.com/binyue/category/944179.html">工程师随笔(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_28" href="http://www.cnblogs.com/binyue/category/809691.html">工程源码学习(8)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_29" href="http://www.cnblogs.com/binyue/category/555336.html">公开课笔记(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_30" href="http://www.cnblogs.com/binyue/category/856130.html">互联网产品设计(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_31" href="http://www.cnblogs.com/binyue/category/924079.html">机器学习</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_32" href="http://www.cnblogs.com/binyue/category/517617.html">面试经验(10)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_33" href="http://www.cnblogs.com/binyue/category/551714.html">前端开发(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_34" href="http://www.cnblogs.com/binyue/category/560023.html">设计模式系列(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_35" href="http://www.cnblogs.com/binyue/category/560025.html">数据结构(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_36" href="http://www.cnblogs.com/binyue/category/538822.html">算法与程序设计(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_37" href="http://www.cnblogs.com/binyue/category/571374.html">团队和项目管理(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_38" href="http://www.cnblogs.com/binyue/category/770959.html">网络编程实践(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_39" href="http://www.cnblogs.com/binyue/category/723460.html">消息中间件应用(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_40" href="http://www.cnblogs.com/binyue/category/920746.html">压力测试及性能优化(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_imagecategory" class="catListImageCategory sidebar-block">
+<h3 class="catListTitle">相册</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/binyue/gallery/967887.html" rel="nofollow">博文配图(1)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	158529
+	</li>
+	<li class="liRank">
+		排名 -	1405
+	</li>
+</ul>
+</div>
+
+
+</div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/binyue/p/4015884.html">1. 阿里、百度、搜狐等公司社招面试记录与总结(10902)</a></li><li><a href="http://www.cnblogs.com/binyue/p/4666701.html">2. 菜鸟学Linux命令:ssh命令 远程登录(10373)</a></li><li><a href="http://www.cnblogs.com/binyue/p/3324524.html">3. Java Eclipse进行断点调试(8110)</a></li><li><a href="http://www.cnblogs.com/binyue/p/4815459.html">4. 使用Jenkins配置Git和Maven的自动化构建(7875)</a></li><li><a href="http://www.cnblogs.com/binyue/p/5380322.html">5. Dubbo超时和重连机制(7745)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="http://www.cnblogs.com/binyue/p/4015884.html">1. 阿里、百度、搜狐等公司社招面试记录与总结(40)</a></li><li><a href="http://www.cnblogs.com/binyue/p/6374200.html">2. 回顾和总结2016年，展望新年的小目标(29)</a></li><li><a href="http://www.cnblogs.com/binyue/p/6857716.html">3. 开卷有益，工程师进阶推荐的十本书(9)</a></li><li><a href="http://www.cnblogs.com/binyue/p/6141088.html">4. 大型网站压力测试及优化方案(7)</a></li><li><a href="http://www.cnblogs.com/binyue/p/6672073.html">5. 当设计消息队列时我们关心什么(5)</a></li></ul></div>
+</div>
+</div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2017 邴越
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+<link type="text/css" rel="stylesheet" href="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/myRewards.css"><div id="myRewards" class="myRewards"><a class="btn-myRewards" href="javascript:;"><img class="png" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/tab_5.png"></a><div class="myRewards-main"><h1 class="myR-h">喜欢请打赏</h1><div class="myRewardsbox"><div class="myRewards-list"><ul class="not-full"><li class="myR-on"><a href="javascript:;">支付宝<img class="png" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/alipay.png" alt="支付宝"></a></li><li class=""><a href="javascript:;">微信<img class="png" src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/weixin.png" alt="微信"></a></li></ul></div><div class="myRewards-detail"><div class="myRewards-ubox"><p class="myRewards-code-tit">扫描二维码打赏</p><div class="myRewards-code"><img src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/alipay(1).png"></div><p class="myRewards-account">支付宝打赏</p></div></div></div><p class="myR-bot"><a href="https://github.com/greedying/tctip" target="_blank">了解更多</a></p></div></div><script src="./使用Jenkins配置Git和Maven的自动化构建 - 邴越 - 博客园_files/index"></script></body></html>

@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html -->
+<html class="theme-next muse use-motion" lang="zh-Hans"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="./GitLab搭建手记 _ iTimothy_files/jquery.fancybox.css" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="./GitLab搭建手记 _ iTimothy_files/css" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="./GitLab搭建手记 _ iTimothy_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="./GitLab搭建手记 _ iTimothy_files/main.css" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="git, gitlab, git服务">
+
+
+
+
+
+  <link rel="alternate" href="https://xiaozhou.net/atom.xml" title="iTimothy" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="https://xiaozhou.net/img/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="最近闲下心来，重新折腾了一下GitLab，相比起一两年前折腾起GitLab的痛苦经历，各种Ruby环境配置以及依赖包的问题，搞得人一心想放弃。如今，GitLab的安装包安装起来真是方便多了，使用官方提供的Omnibus package，可以在两三分钟的时间搭好GitLab，可以看到GitLab作为一个开源产品，是一直在不断进步的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitLab搭建手记">
+<meta property="og:url" content="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html">
+<meta property="og:site_name" content="iTimothy">
+<meta property="og:description" content="最近闲下心来，重新折腾了一下GitLab，相比起一两年前折腾起GitLab的痛苦经历，各种Ruby环境配置以及依赖包的问题，搞得人一心想放弃。如今，GitLab的安装包安装起来真是方便多了，使用官方提供的Omnibus package，可以在两三分钟的时间搭好GitLab，可以看到GitLab作为一个开源产品，是一直在不断进步的。">
+<meta property="og:image" content="https://www.xiaozhou.net/pics/gitlab1.png">
+<meta property="og:image" content="https://www.xiaozhou.net/pics/gitlab2.png">
+<meta property="og:updated_time" content="2017-05-12T05:52:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitLab搭建手记">
+<meta name="twitter:description" content="最近闲下心来，重新折腾了一下GitLab，相比起一两年前折腾起GitLab的痛苦经历，各种Ruby环境配置以及依赖包的问题，搞得人一心想放弃。如今，GitLab的安装包安装起来真是方便多了，使用官方提供的Omnibus package，可以在两三分钟的时间搭好GitLab，可以看到GitLab作为一个开源产品，是一直在不断进步的。">
+<meta name="twitter:image" content="https://www.xiaozhou.net/pics/gitlab1.png">
+
+
+
+<script src="./GitLab搭建手记 _ iTimothy_files/stats"></script><script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html">
+
+
+
+
+
+  <title> GitLab搭建手记 | iTimothy </title>
+<script type="text/javascript" async="" src="./GitLab搭建手记 _ iTimothy_files/count.js.téléchargement"></script><script type="text/javascript" async="" src="./GitLab搭建手记 _ iTimothy_files/embed.js.téléchargement"></script><script src="./GitLab搭建手记 _ iTimothy_files/count-data.js.téléchargement"></script><link rel="preload" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.a219a5731bfdc6a1d16fa492c1ac36e9.css"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.90517cf61c3519992d816707359eb2b0.js"><link rel="preload" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.8c32c0323ca65ff6ea4555f4c1c9838e.js"><link rel="preload" as="script" href="https://disqus.com/next/config.js"><style type="text/css">.fancybox-margin{margin-right:17px;}</style></head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans" class="" style="padding-right: 320px;">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=19418239";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="https://xiaozhou.net/" class="brand" rel="start" style="opacity: 1;">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title" style="opacity: 1; top: 0px;">iTimothy</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle" style="opacity: 1; top: 0px;">君看一叶舟，出没风波里</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home" style="opacity: 1; transform: translateY(0px);">
+          <a href="https://xiaozhou.net/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories" style="opacity: 1; transform: translateY(0px);">
+          <a href="https://xiaozhou.net/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about" style="opacity: 1; transform: translateY(0px);">
+          <a href="https://xiaozhou.net/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives" style="opacity: 1; transform: translateY(0px);">
+          <a href="https://xiaozhou.net/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article" style="opacity: 1; display: block; transform: translateY(0px);">
+  <link itemprop="mainEntityOfPage" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html">
+
+  <span style="display:none" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Timothy">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/mrx.jpeg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="iTimothy">
+    <span style="display:none" itemprop="logo" itemscope="" itemtype="http://schema.org/ImageObject">
+      <a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html" class="fancybox" rel="group"><img style="display: none;" itemprop="url image" alt="iTimothy" src="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html"></a>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GitLab搭建手记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-09T11:13:09+08:00">
+                2016-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="https://xiaozhou.net/categories/%E6%8A%80%E6%9C%AF%E6%8E%A7/" itemprop="url" rel="index">
+                    <span itemprop="name">技术控</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="host-gitlab-to-your-own-server-2016-05-09.html" itemprop="commentCount">5 Comments</span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/host-gitlab-to-your-own-server-2016-05-09.html" class="leancloud_visitors" data-flag-title="GitLab搭建手记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count">798</span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近闲下心来，重新折腾了一下GitLab，相比起一两年前折腾起GitLab的痛苦经历，各种Ruby环境配置以及依赖包的问题，搞得人一心想放弃。如今，GitLab的安装包安装起来真是方便多了，使用官方提供的Omnibus package，可以在两三分钟的时间搭好GitLab，可以看到GitLab作为一个开源产品，是一直在不断进步的。</p>
+<a id="more"></a>
+<h2 id="搭建私有Git服务的优势"><a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#搭建私有Git服务的优势" class="headerlink" title="搭建私有Git服务的优势"></a>搭建私有Git服务的优势</h2><p>就目前而言，市面上比较有名的Git服务提供商，大概就是GitHub，BitBucket，GitLab，以及国内的Coding.net(<del>瞎说!不是还有GitCafe么？呃，已经被Coding.net收购鸟</del>)了。实际上，这些Git服务商提供的服务，都能满足个人的需求，无论是免费的开源仓库，还是私有仓库，个人用户都可以使用。这里主要谈一谈为什么需要搭建自己的Git服务，大概是有以下几点原因：</p>
+<blockquote>
+<ul>
+<li>公司的项目，因为商业层面的原因，需要把代码托管到自有的服务器上，并且服务器很有可能是放在企业内网中，不对公网开放。</li>
+<li>出于安全性的考虑，暂时没有使用国内的Git服务平台的计划。</li>
+<li>GitHub和BitBucket，GitLab，由于服务商是在国外，受地域的影响，因此在网络访问上会有延迟。</li>
+<li>现有的服务商，对于免费的套餐都有一定的限制，比如GitHub只允许建立免费的开源repository，不允许建立私有的仓库。BitBucket允许建立无限制的私有项目，不过对于项目中参与的开发人员是有人数限制的。当团队中开发者规模达到一定数量后，需要付费购买相应的套餐。</li>
+</ul>
+</blockquote>
+<p>这里并不是说购买GitHub和Bitbucket的付费套餐不好，购买付费套餐也未尝不是一种解决方案。而对于达到一定规模的团队来说，自己搭建私有的Git服务也是一个非常不错的选择。</p>
+<p>GitLab本身也分为免费的社区版和付费的企业版，对于初创团队来说，免费的社区版已经能满足团队的使用了。关于社区版与企业版在功能上的差异对比，可以参考<a href="https://about.gitlab.com/features/#compare" target="_blank" rel="external">这里</a>。当然，在团队发展壮大之后，也建议大家购买付费的企业版，获得更多的高级功能，除此之外，开源项目还是需要大家的支持才能更好的发展。</p>
+<h2 id="GitLab的安装与搭建"><a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#GitLab的安装与搭建" class="headerlink" title="GitLab的安装与搭建"></a>GitLab的安装与搭建</h2><p>前面提到过，GitLab的安装已经相当方便了，在安装之前，我们需要根据实际需求，准备对应硬件配置的服务器。在官方的文档上，有提到过支持不同用户数，所需要的不同的硬件配置。</p>
+<h3 id="CPU的选择："><a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#CPU的选择：" class="headerlink" title="CPU的选择："></a>CPU的选择：</h3><ul>
+<li>1核心的CPU，基本上可以满足需求，大概支撑100个左右的用户，不过在运行GitLab网站的同时，还需要运行多个worker以及后台job，显得有点捉襟见肘了。</li>
+<li>两核心的CPU是推荐的配置，大概能支撑500个用户。</li>
+<li>4核心的CPU能支撑 2,000 个用户。</li>
+<li>8核心的CPU能支撑 5,000 个用户。</li>
+<li>16核心的CPU能支撑 10,000 个用户。</li>
+<li>32核心的CPU能支撑 20,000 个用户。</li>
+<li>64核心的CPU能支持多达 40,000 个用户。</li>
+</ul>
+<h3 id="内存大小的选择："><a href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#内存大小的选择：" class="headerlink" title="内存大小的选择："></a>内存大小的选择：</h3><ul>
+<li>512MB RAM 加上 1.5GB 的交换分区是最小化配置，不过不推荐用这么低的内存。</li>
+<li>1GB RAM 加上 1GB 交换分区，大概能撑100个左右的用户，不过会比较慢。</li>
+<li>2GB RAM 是推荐的配置，能撑100个左右的用户。</li>
+<li>4GB RAM 能支撑 1,000 个用户。</li>
+<li>8GB RAM 能支撑 2,000 个用户。</li>
+<li>16GB RAM 能支撑 4,000 个用户。</li>
+<li>32GB RAM 能支撑 8,000 个用户。</li>
+<li>64GB RAM 能支撑 16,000 个用户。</li>
+<li>128GB RAM 能支撑 32,000 个用户。</li>
+</ul>
+<p>作为练手搭建，主要是为满足自己托管私有Git仓库的需求，所以这次我选择的机器是Azure东亚机房主机，配置如下：</p>
+<p><a href="./GitLab搭建手记 _ iTimothy_files/gitlab1.png" target="_blank" rel="external"></a></p><div style="text-align:center"><a href="./GitLab搭建手记 _ iTimothy_files/gitlab1.png" target="_blank" rel="group" class="fancybox"><img src="./GitLab搭建手记 _ iTimothy_files/gitlab1.png"></a></div><p></p>
+<p>GitLab对操作系统的支持也是有一定限制的，这一点要特别注意了。主流的Linux发行版是兼容的，比如：Ubuntu/Debian/CentOS/RedHat。现在还不支持的操作系统是: OS X/Arch Linux/Fedora/Gentoo/FreeBSD。Ubuntu 16.04 LTS是GitLab官方推荐的系统，这次就用它了。</p>
+<p>搭建的过程就不详细表述了，可以按照官方的教程一步一步的来，用Omnibus的安装包，两三分钟就可以搞定。在安装中大致需要注意一些地方：</p>
+<ul>
+<li>GitLab默认使用Postfix作为邮件系统，在安装过程中，如果我们需要系统往外网邮箱发送邮件，记得在配置的时候，选择”Internet Site”。</li>
+<li>如果使用自定义的域名，需要在/etc/gitlab/gitlab.rb中修改并配置external_url选项。保存之后，用 sudo gitlab-ctl reconfigure 命令使之生效。</li>
+</ul>
+<p>安装结束过后，就可以直接用浏览器通过域名访问了。第一次访问的时候，系统会提示更新管理员密码。进入管理后台，进行一些简单的自定义配置，于是，一个私有的GitLab搭好了：</p>
+<p><a href="./GitLab搭建手记 _ iTimothy_files/gitlab2.png" target="_blank" rel="external"></a></p><div style="text-align:center"><a href="./GitLab搭建手记 _ iTimothy_files/gitlab2.png" target="_blank" rel="group" class="fancybox"><img src="./GitLab搭建手记 _ iTimothy_files/gitlab2.png"></a></div><p></p>
+<p>新建了一个git仓库，尝试推送代码到服务器，也许因为服务器在香港的原因，速度还真不赖。打算以后把我的一些私有项目都迁移到这台私有GitLab服务器上来。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>支持原创技术分享，据说打赏我的人，都找到了女朋友！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById(&#39;QR&#39;); if (qr.style.display === &#39;none&#39;) {qr.style.display=&#39;block&#39;;} else {qr.style.display=&#39;none&#39;}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <a href="./GitLab搭建手记 _ iTimothy_files/wechat-reward.png" class="fancybox" rel="group"><img id="wechat_qr" src="./GitLab搭建手记 _ iTimothy_files/wechat-reward.png" alt="Timothy WeChat Pay"></a>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <a href="./GitLab搭建手记 _ iTimothy_files/alipay-reward.png" class="fancybox" rel="group"><img id="alipay_qr" src="./GitLab搭建手记 _ iTimothy_files/alipay-reward.png" alt="Timothy Alipay"></a>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="https://xiaozhou.net/tags/git/" rel="tag"># git</a>
+          
+            <a href="https://xiaozhou.net/tags/gitlab/" rel="tag"># gitlab</a>
+          
+            <a href="https://xiaozhou.net/tags/git%E6%9C%8D%E5%8A%A1/" rel="tag"># git服务</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="https://xiaozhou.net/something-about-range-of-go-2016-04-10.html" rel="next" title="聊聊Go中的Range关键字">
+                <i class="fa fa-chevron-left"></i> 聊聊Go中的Range关键字
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="https://xiaozhou.net/getting-started-with-gitlab-ci-2016-05-11.html" rel="prev" title="GitLab之持续集成实践">
+                GitLab之持续集成实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread"><iframe id="dsq-app1" name="dsq-app1" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./GitLab搭建手记 _ iTimothy_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 922px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first" style="top: 5px; transform: rotateZ(-45deg); width: 100%;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle" style="opacity: 0;"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last" style="top: -5px; transform: rotateZ(45deg); width: 100%;"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar sidebar-active" style="display: block; width: 320px;">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person" style="opacity: 1; display: block; transform: translateX(0px);">
+          <img class="site-author-image" itemprop="image" src="./GitLab搭建手记 _ iTimothy_files/mrx.jpeg" alt="Timothy">
+          <p class="site-author-name" itemprop="name">Timothy</p>
+          <p class="site-description motion-element" itemprop="description" style="opacity: 1; display: block; transform: translateX(0px);">Timothy的技术博客,记录技术以及生活点滴</p>
+        </div>
+        <nav class="site-state motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          <div class="site-state-item site-state-posts">
+            <a href="https://xiaozhou.net/archives">
+              <span class="site-state-item-count">507</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="https://xiaozhou.net/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1092</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+            <a href="https://xiaozhou.net/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element" style="opacity: 1; display: block; transform: translateX(0px);">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/timothyye" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/timothyye" target="_blank" title="twitter">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/timothyye" target="_blank" title="weibo">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  weibo
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/timothyye" target="_blank" title="zhihu">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  zhihu
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline" style="opacity: 1; display: block; transform: translateX(0px);">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://zww.me/" title="ZWWoOoOo" target="_blank">ZWWoOoOo</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://rickdyang.me/" title="Rick Yang的播客" target="_blank">Rick Yang的播客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.raymondjiang.com/" title="想当超人的狼" target="_blank">想当超人的狼</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://a-shun.com/" title="A.shun Blog" target="_blank">A.shun Blog</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.mzihen.com/" title="子痕的博客" target="_blank">子痕的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://laob.me/" title="毕扬博客" target="_blank">毕扬博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blueandhack.com/" title="BlueAndHack" target="_blank">BlueAndHack</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.chengbo.net/" title="ChengBo" target="_blank">ChengBo</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://cguage.com/" title="C瓜哥" target="_blank">C瓜哥</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://dnspod.cn/" title="DNSPod" target="_blank">DNSPod</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://yeyaxi.com/" title="ss1271的奋斗" target="_blank">ss1271的奋斗</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://vcfans.com/" title="VC爱好者" target="_blank">VC爱好者</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://vim-tips.com/" title="VimTips" target="_blank">VimTips</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://jiucool.org/" title="久酷博客" target="_blank">久酷博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/net_lover/" title="孟子E章" target="_blank">孟子E章</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://watch-life.net/" title="守望轩" target="_blank">守望轩</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://loveayang.com.cn/" title="漓筝轩" target="_blank">漓筝轩</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://bama.net/" title="爸妈网" target="_blank">爸妈网</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://xiaohui.com/" title="程序员小辉" target="_blank">程序员小辉</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://kianli.com/" title="Kian.Li" target="_blank">Kian.Li</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active" style="opacity: 1; display: block; transform: translateX(0px);">
+          <div class="post-toc" style="max-height: 841px; width: calc(100% + 17px);">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#搭建私有Git服务的优势"><span class="nav-number">1.</span> <span class="nav-text">搭建私有Git服务的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#GitLab的安装与搭建"><span class="nav-number">2.</span> <span class="nav-text">GitLab的安装与搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#CPU的选择："><span class="nav-number">2.1.</span> <span class="nav-text">CPU的选择：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="https://xiaozhou.net/host-gitlab-to-your-own-server-2016-05-09.html#内存大小的选择："><span class="nav-number">2.2.</span> <span class="nav-text">内存大小的选择：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  ©  2004 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Timothy</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io/">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/index.js.téléchargement"></script>
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/fastclick.min.js.téléchargement"></script>
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/jquery.lazyload.js.téléchargement"></script>
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/velocity.min.js.téléchargement"></script>
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/velocity.ui.min.js.téléchargement"></script>
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/jquery.fancybox.pack.js.téléchargement"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/utils.js.téléchargement"></script>
+
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/motion.js.téléchargement"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/scrollspy.js.téléchargement"></script>
+<script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/post-details.js.téléchargement"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="./GitLab搭建手记 _ iTimothy_files/bootstrap.js.téléchargement"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'xiaozhounet';
+      var disqus_identifier = 'host-gitlab-to-your-own-server-2016-05-09.html';
+
+      var disqus_title = "GitLab搭建手记";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="./GitLab搭建手记 _ iTimothy_files/av-core-mini-0.6.1.js.téléchargement"></script><iframe style="display: none;" src="./GitLab搭建手记 _ iTimothy_files/saved_resource(2).html"></iframe>
+  <script>AV.initialize("tR6klRCtAOQyKhPFNNpgAryq-gzGzoHsz", "5lNSqQEOjQf2KGOamrXPIeaV");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+
+
+</body></html>

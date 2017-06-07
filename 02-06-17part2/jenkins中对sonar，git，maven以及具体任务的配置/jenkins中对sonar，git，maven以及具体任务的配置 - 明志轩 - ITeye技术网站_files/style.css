@@ -1,0 +1,151 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: "";
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+a {
+    text-decoration: none;
+}
+/*FIN DU RESET*/
+
+html {
+    overflow: hidden;
+}
+*, *:focus {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline-style: none;/*IE*/
+}
+div {
+    position: absolute;
+}
+#main {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000000;
+    border: 1px solid #666;
+    box-sizing: border-box;
+}
+#cadre {
+    left: 52px;
+    top: 27px;
+    opacity: 1;
+}
+#maisonbox {
+    left: 71px;
+    top: 46px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    opacity: 0;
+}
+#box {
+    left: 181px;
+    top: 150px;
+    opacity: 0;
+}
+#btn {
+    left: 176px;
+    top: 192px;
+    opacity: 0;
+}
+#txt_change {
+    left: 109px;
+    top: 125px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    z-index: 10;
+    opacity: 1;
+}
+#txt_join {
+    left: 19px;
+    top: 92px;
+    opacity: 0;
+    z-index:6;
+}
+#txt_rmb {
+    left: 18px;
+    top: 57px;
+    transform: scale(0.8);
+    transform-origin: 50% 50%;
+    opacity: 0;
+    z-index:8;
+}
+#logoorange {
+    left: 122px;
+    top: 60px;
+    opacity: 0;
+}
+#logoorange2 {
+    right: 10px;
+    top: 10px;
+    transform-origin: 50% 50%;
+    transform: scale(0.7);
+    opacity: 0;
+}
+#btn_cliquezici {
+    left: 101px;
+    top: 139px;
+    transform-origin: 50% 50%;
+    transform: scale(1);
+    opacity: 0;
+}
+#txt_conditions {
+    background: white;
+    color: #111;
+    font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 10px;
+    line-height: 12px;
+    font-weight: 400;
+    left: 0;
+    z-index: 1000;
+    opacity: 0;
+}
+#txt_conditions .arrow {
+    width: 7px;
+    height: 4px;
+    background: url(img/fleche.png);
+    position: absolute;
+    top: 13px;
+    right: 7px;
+}
+
+#txt_conditions p{
+    display: block;
+    padding: 10px 10px 0;
+    margin-bottom: 10px;
+}
+#txt_conditions p.text{
+    margin-bottom: 15px;
+    padding: 10px 10px 15px;
+}

@@ -1,0 +1,83 @@
+var sas = sas || {};
+sas.utils = sas.utils || {};
+if (!sas.utils.cdns) {
+  sas.utils.cdns = {
+    "http:" : "http://ced-ns.sascdn.com",
+    "https:" : "https://ced-ns.sascdn.com"
+  }
+}
+
+var sas=sas||{};sas.utils=sas.utils||{};sas.events=sas.events||{};sas.rev=sas.rev||20110214;(function(){if(!sas.utils.cdns){sas.utils.cdns={"http:":"http://ak-ns.sascdn.com","https:":"https://ec-ns.sascdn.com"}}else{if(!sas.utils.cdns["http:"]||sas.utils.cdns["http:"].length==0){sas.utils.cdns["http:"]="http://ak-ns.sascdn.com"}if(!sas.utils.cdns["https:"]||sas.utils.cdns["https:"].length==0){sas.utils.cdns["https:"]="https://ec-ns.sascdn.com"}}var e=function(){};sas.utils.getIEVersion=function(){var g=navigator.userAgent.match(/(?:MSIE |Trident\/.*; rv:)(\d+)/);return g?parseInt(g[1]):undefined};sas.events.addEvent=function(h,g,i){if(!h||!g||!i){return}if(h.attachEvent){h.attachEvent("on"+g,i)}else{if(h.addEventListener){h.addEventListener(g,i,false)}}return{removeEvent:function(){if(h.detachEvent){h.detachEvent("on"+g,i)}else{if(h.removeEventListener){h.removeEventListener(g,i,false)}}}}};sas.events.addLoadEvent=function(h,l){if(!h||!l){return}var g="load";var i=function(){return true};var k=sas.utils.getIEVersion();if(k<11||h==document){g="readystatechange";i=function(){if(!h.readyState||h.readyState=="complete"||h.readyState=="loaded"||h.readyState==4){return true}}}var j=sas.events.addEvent(h,g,function(){if(i()){j.removeEvent();l.apply(this,arguments)}})};sas.utils.Latch=function(n){n=n||[];var m=[];var l={};var k=n;var h=false;for(var j=0;j<k.length;j++){l[n[j]]={}}var o=function(){if(h){return}for(var p in l){if(!l[p].status){return}}h=true;var r=g();for(var q=0;q<m.length;q++){m[q].apply(this,r)}};var g=function(){var q=[];for(var p=0;p<k.length;p++){q.push(l[k[p]].result)}return q};this.notify=function(p,i){if(!l[p]){return}else{l[p].status=true;l[p].result=i;o()}};this.addListener=function(i){if(i!=null){h?i():m.push(i)}};o()};sas.utils._libs=sas.utils._libs||{};var b=function(h,g){if(h.charAt(h.length-1)=="/"){h=h.slice(0,-1)}if(g.charAt(0)=="/"){g=g.slice(1)}return h+"/"+g};var c=function(h){if(typeof h==="string"){h=[h]}var k=(document.location.protocol=="https:");var g=k?sas.utils.cdns["https:"]:(sas.utils.cdns[document.location.protocol]||sas.utils.cdns["http:"]);for(var j=0;j<h.length;j++){h[j]=b(g,h[j])}return h};sas.utils.loadLinkCdn=function(g){g=c(g);for(var h=0;h<g.length;h++){a(g[h],true)}};sas.utils.loadScriptCdn=function(g,h){g=c(g);sas.utils.loadScript(g,h)};var f=Math.floor(Math.random()*1000000);var d=1;sas.utils._callbacks=sas.utils._callbacks||{};var a=function(k,h,g,j){var l=(h?"link":"script")+"-"+f+"-"+d++;var i=document.createElement(h?"link":"script");i.id=l;i.setAttribute("type",h?"text/css":"text/javascript");i.setAttribute(h?"href":"src",k);if(h){i.setAttribute("rel","stylesheet")}if(!h&&g){i.setAttribute("async","true")}sas.utils._libs[k]={loaded:false,callbacks:[]};if(j!=null){sas.utils._libs[k].callbacks.push(j)}sas.utils._callbacks[l]=(function(m){return function(){sas.utils._libs[m].loaded=true;for(var n=0;n<sas.utils._libs[m].callbacks.length;n++){sas.utils._libs[m].callbacks[n]()}}})(k);if(h||g){document.getElementsByTagName("head")[0].appendChild(i);sas.events.addLoadEvent(document.getElementById(l),sas.utils._callbacks[l])}else{document.write(i.outerHTML);document.write("<script type='text/javascript'>(function() { sas.utils._callbacks['"+l+"'](); })();<\/script>")}};sas.utils.loadScript=function(h,j){j=j||{};j.async=j.async==null?true:j.async;var l=j.onLoad||e;if(typeof h==="string"){h=[h]}var m=new sas.utils.Latch(h);m.addListener(l);for(var k=0;k<h.length;k++){var n=h[k];var g=(function(i){return function(){m.notify(i)}})(n);if(!sas.utils._libs[n]){a(n,false,j.async,g)}else{if(sas.utils._libs[n].loaded){m.notify(n)}else{sas.utils._libs[n].callbacks.push(g)}}}}})();
+
+(function() {
+
+var tag = document.getElementById('sas_4479405');
+if (!tag) {
+  document.write("<div id='sas_4479405'></div>");
+} else {
+  /* Pre-create something in the DOM to have the sas_loadHandler to work */
+  var d = document.createElement("div");
+  d.style.display = "none";
+  tag.appendChild(d);
+}
+
+var sas = window.sas;
+// used to detect ajax call for pubj
+var isAsync = window.sas_ajax || false;
+
+// Config 
+var config = {
+        id: 4479405,
+        formatId: 4479405,
+        tagId: "sas_4479405",
+        instanceIndex: 1,
+        customScript: '',
+        forcedIframeWidth: 0,
+        forcedIframeHeight: 0,
+        oba: 0,
+        creatives:
+        [{
+          id: '18800252',
+          type: 4,
+          url: 'https://ced.sascdn.com/diff/1082/a199901/ODR_T2A_G_300x250/index.html',
+          countUrl: '',
+          clickUrl: 'https://www.googleadservices.com/pagead/aclk%3Fsa%3DL%26ai%3DCqy5B4aE2WY3qLOXGtgeM1KfIDsyTsPxIuez1tp0FspHlm9YBEAEg6eXdHmD7gYCAiAqgAZzN-t4DyAEJqQJUojZ93eCyPqgDAaoErwFP0IVbMXo9E7uoY8PY4gmOIVaRHl7s7r3mTCrDWZLrRbi5pvxO_NBVrblRljZhk_ZJmI7sT0BMevB_KNaUBOyRWzxJ1h0eIxpC2g5wbpyr64kdm16b6grVEiMGvbBMED2w5uvsN_-P7TtRdi23LcmLS2Cx1wUkHhnFBPaL5lD5aJrp3-gF1zlK98365FVeg-prYoNImh0ZNE1fAGI4ZN35New7OOaFCaTWNR7NklV6oAYRgAfMsoUhqAemvhvYBwDSCAUIgGEQAdgTAg%26num%3D1%26cid%3DCAASEuRo2dA9blbyxyaaZXhWsqiwGQ%26sig%3DAOD64_2877la6_aUOjFjcBVyEHlMiJLXKw%26client%3Dca-pub-8990951720398508%26adurl%3Dhttps://ww1082.smartadserver.com/click?imgid=18800252&insid=4479405&pgid=774688&uid=6791064374414680856&tgt=%24dt%3d1t%3bnational%3b%3b%24mct%3d1t%3b%24hc&systgt=%24qc%3d1309065439%3b%24ql%3dmedium%3b%24qpc%3d75001%3b%24qpp%3d0%3b%24qt%3d184_1903_42652t%3b%24dma%3d0%3b%24b%3d16580%3b%24o%3d11061%3b%24sw%3d1920%3b%24sh%3d1080&pgDomain=https%3a%2f%2fgoogleads.g.doubleclick.net%2fpagead%2fads%3fclient%3dca-pub-8990951720398508%26output%3dhtml%26h%3d250%26slotname%3d8267689356%252F5752063962%26adk%3d2391074368%26adf%3d486215110%26w%3d300%26lmt%3d1496752609%26loeid%3d191880401%26flash%3d0%26url%3dhttp%253A%252F%252Fchengtong-java.iteye.com%252Fblog%252F2256366%26wgl%3d1%26dt%3d1496752609529%26bpp%3d20%26bdt%3d2610%26fdt%3d92%26idt%3d118%26shv%3dr20170531%26cbv%3dr20170110%26saldr%3dsa%26prev_slotnames%3d8267689356%252F1918544322%26correlator%3d2439834040722%26frm%3d20%26ga_vid%3d133963294.1496752610%26ga_sid%3d1496752610%26ga_hid%3d2000790287%26ga_fc%3d0%26pv%3d1%26iag%3d3%26icsg%3d2%26nhd%3d1%26dssz%3d2%26mdo%3d0%26mso%3d0%26u_tz%3d120%26u_his%3d6%26u_java%3d0%26u_h%3d1080%26u_w%3d1920%26u_ah%3d1080%26u_aw%3d1920%26u_cd%3d24%26u_nplug%3d4%26u_nmime%3d5%26adx%3d1603%26ady%3d740%26biw%3d1903%26bih%3d990%26abxe%3d1%26eid%3d4089041%252C10593695%252C191880411%252C575144605%252C389613001%252C21060078%26oid%3d3%26rx%3d0%26eae%3d0%26fc%3d528%26brdim%3d-1920%252C0%252C-1920%252C0%252C1920%252C0%252C1920%252C1080%252C1920%252C990%26vis%3d1%26rsz%3d%257C%257CfE%257C%26abl%3dCF%26ppjl%3df%26pfx%3d1%26fu%3d16%26bc%3d1%26ifi%3d2%26xpc%3dnYm7jrXl9I%26p%3dhttp%253A%2f%2fchengtong-java.iteye.com%26dtd%3d139&go=https%3a%2f%2fboutique.orange.fr%2f1%2fbons-plans%2finternet%3futm_source%3dGoogle%26utm_medium%3ddisplay%26utm_campaign%3dEpub_OR+FAI_WE%26utm_content%3dshopfai-redir-data_prospection_aqu_in_market',
+          clickTarget: '_blank',
+          width: '300',
+          height: '250',
+          pixelRatio: '1',
+          altText: '',
+          creativeScript: '<!-- Adledge Tag -->\r\n'+'<scr'+'ipt type="text/javascript">(function(){try{var a="i"+Math.round(1E10*Math.random());window[a]={\r\n'+'//--- Parameters ---\r\n'+'cltid:"3814",\r\n'+'advid:"199901",\r\n'+'cpgid:"644437",\r\n'+'steid:"774688",\r\n'+'pctid:"4479405",\r\n'+'ctvid:"18800252"        \r\n'+'//!!! DO NOT MODIFY BELOW THIS LINE !!!\r\n'+'};"loading"===document.readyState&&(document.write("\\x3c!-- aleagypkganch "+a+" --\\x3e"),window[a].co=1);document.currentScript&&(window[a].cs=document.currentScript);var b=document.location.protocol;window[a].secure&& (b="https:");var c=document.createElement("script");c.type="text/javascript";c.src=b+"//rs.adledge.com/aleagypkg";c.setAttribute("tid",a);c.setAttribute("async","async");var d=document.getElementsByTagName("head")[0];d.insertBefore(c,d.firstChild);var e="//epn.adledge.com/v14/?st=1&tid="+a,f;for(f in window[a])window[a].hasOwnProperty(f)&&(e+="&"+f+"="+encodeURIComponent(window[a][f]));e+="&hurl="+window.location.toString()+"&ref0="+document.referrer.toString();(new Image).src=b+e}catch(g){(new Image).src= "http://nda.adledge.com?type=T-CALL&exception="+g.name+"->"+g.message};})();</scr'+'ipt><noscript><img width="1" height="1" style="position:absolute;visibility:hidden;display:none;border:0;margin:0" src="http://epn.adledge.com/v14/?st=1&ns=1&cltid=9999&advid=adv_id&advnm=adv_name&cpgid=cpg_id&cpgnm=cpg_name&ntwid=network_id&ntwnm=network_name&steid=site_id&stenm=site_name&pctid=pct_id&adid=ad_id&ctvid=ctv_id&rvd=1&ckeid=001&wdt=400&hgt=200"></noscript>',
+          flashVars: '',
+          version: '',
+          wMode: 'Opaque',
+          backupImage: {
+            id: '18800251',
+            type: 1,
+            url: 'https://ced.sascdn.com/diff/1082/a199901/odr-300x250(0).gif',
+            clickUrl: 'https://www.googleadservices.com/pagead/aclk%3Fsa%3DL%26ai%3DCqy5B4aE2WY3qLOXGtgeM1KfIDsyTsPxIuez1tp0FspHlm9YBEAEg6eXdHmD7gYCAiAqgAZzN-t4DyAEJqQJUojZ93eCyPqgDAaoErwFP0IVbMXo9E7uoY8PY4gmOIVaRHl7s7r3mTCrDWZLrRbi5pvxO_NBVrblRljZhk_ZJmI7sT0BMevB_KNaUBOyRWzxJ1h0eIxpC2g5wbpyr64kdm16b6grVEiMGvbBMED2w5uvsN_-P7TtRdi23LcmLS2Cx1wUkHhnFBPaL5lD5aJrp3-gF1zlK98365FVeg-prYoNImh0ZNE1fAGI4ZN35New7OOaFCaTWNR7NklV6oAYRgAfMsoUhqAemvhvYBwDSCAUIgGEQAdgTAg%26num%3D1%26cid%3DCAASEuRo2dA9blbyxyaaZXhWsqiwGQ%26sig%3DAOD64_2877la6_aUOjFjcBVyEHlMiJLXKw%26client%3Dca-pub-8990951720398508%26adurl%3Dhttps://ww1082.smartadserver.com/click?imgid=18800251&insid=4479405&pgid=774688&uid=6791064374414680856&tgt=%24dt%3d1t%3bnational%3b%3b%24mct%3d1t%3b%24hc&systgt=%24qc%3d1309065439%3b%24ql%3dmedium%3b%24qpc%3d75001%3b%24qpp%3d0%3b%24qt%3d184_1903_42652t%3b%24dma%3d0%3b%24b%3d16580%3b%24o%3d11061%3b%24sw%3d1920%3b%24sh%3d1080&pgDomain=https%3a%2f%2fgoogleads.g.doubleclick.net%2fpagead%2fads%3fclient%3dca-pub-8990951720398508%26output%3dhtml%26h%3d250%26slotname%3d8267689356%252F5752063962%26adk%3d2391074368%26adf%3d486215110%26w%3d300%26lmt%3d1496752609%26loeid%3d191880401%26flash%3d0%26url%3dhttp%253A%252F%252Fchengtong-java.iteye.com%252Fblog%252F2256366%26wgl%3d1%26dt%3d1496752609529%26bpp%3d20%26bdt%3d2610%26fdt%3d92%26idt%3d118%26shv%3dr20170531%26cbv%3dr20170110%26saldr%3dsa%26prev_slotnames%3d8267689356%252F1918544322%26correlator%3d2439834040722%26frm%3d20%26ga_vid%3d133963294.1496752610%26ga_sid%3d1496752610%26ga_hid%3d2000790287%26ga_fc%3d0%26pv%3d1%26iag%3d3%26icsg%3d2%26nhd%3d1%26dssz%3d2%26mdo%3d0%26mso%3d0%26u_tz%3d120%26u_his%3d6%26u_java%3d0%26u_h%3d1080%26u_w%3d1920%26u_ah%3d1080%26u_aw%3d1920%26u_cd%3d24%26u_nplug%3d4%26u_nmime%3d5%26adx%3d1603%26ady%3d740%26biw%3d1903%26bih%3d990%26abxe%3d1%26eid%3d4089041%252C10593695%252C191880411%252C575144605%252C389613001%252C21060078%26oid%3d3%26rx%3d0%26eae%3d0%26fc%3d528%26brdim%3d-1920%252C0%252C-1920%252C0%252C1920%252C0%252C1920%252C1080%252C1920%252C990%26vis%3d1%26rsz%3d%257C%257CfE%257C%26abl%3dCF%26ppjl%3df%26pfx%3d1%26fu%3d16%26bc%3d1%26ifi%3d2%26xpc%3dnYm7jrXl9I%26p%3dhttp%253A%2f%2fchengtong-java.iteye.com%26dtd%3d139&go=https%3a%2f%2fboutique.orange.fr%2f1%2fbons-plans%2finternet%3futm_source%3d%5bsas_siteName%5d%26utm_medium%3ddisplay%26utm_campaign%3d%5bsas_campaignName%5d%26utm_content%3d%5bsas_pageName%5d',
+            clickTarget: '_blank',
+            width: '300',
+            height: '250',
+            altText: ''
+          }
+        }]
+      };
+
+if(sas.utils.getIEVersion() < 10 && !isAsync){
+// IE9- require full script injection in sync case.
+  
+  
+  
+  sas.banner.render(config, {async: isAsync});
+}
+else{
+  sas.utils.loadScriptCdn("/diff/templates/js/sas/sas-browser.js", { async: isAsync, onLoad: function() {
+    sas.utils.loadScriptCdn("/diff/templates/js/sas/sas-dom.js", { async: isAsync, onLoad: function() {
+    sas.utils.loadScriptCdn("/diff/templates/js/banner/sas-banner-2.2.js", { async: isAsync, onLoad: function() {
+      sas.banner.render(config, {async: isAsync});
+    }});
+  }});
+}});
+}
+})();
